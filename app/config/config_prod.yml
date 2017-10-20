@@ -1,0 +1,40 @@
+imports:
+    - { resource: config.yml }
+
+doctrine:
+    orm:
+#        auto_mapping: true
+#        metadata_cache_driver: apc
+#        result_cache_driver: apc
+#        query_cache_driver: apc
+
+monolog:
+    handlers:
+        mail:
+            type:         fingers_crossed
+            action_level: critical
+            handler:      deduplicated
+        deduplicated:
+            type:    deduplication
+            handler: swift
+        swift:
+            type:       swift_mailer
+            from_email: no-reply.web@world.wild
+            to_email:   [web1@world.wild, web2@world.wild]
+            subject:    KickStart Error
+            formatter:  monolog.formatter.html
+            content_type: text/html
+            level:      debug
+        main:
+            type:         rotating_file
+            action_level: error
+            handler:      nested
+            max_files: 7
+            channels: [!event]
+        nested:
+            type:  rotating_file
+            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+            max_files: 7
+            channels: [!event]
+            process_psr_3_messages: false
