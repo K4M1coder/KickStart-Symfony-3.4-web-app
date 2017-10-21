@@ -159,6 +159,8 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
+
+
 # Stof\DoctrineExtensionsBundle configuration
 stof_doctrine_extensions:
     orm:

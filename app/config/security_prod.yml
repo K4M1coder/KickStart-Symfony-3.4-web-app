@@ -1,0 +1,5 @@
+security:
+    providers:
+        chain_provider:
+                    chain:
+                        providers: [fos_userbundle]
