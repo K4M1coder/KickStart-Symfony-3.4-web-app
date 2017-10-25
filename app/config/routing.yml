@@ -5,6 +5,15 @@ NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc
 
+nelmio_api_swagger:
+    resource: "@NelmioApiDocBundle/Resources/config/swagger_routing.yml"
+    prefix: /api/doc/swagger
+
+app.swagger:
+    path: /api/doc.json
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger }
+
 api_login_check:
     path: /api/login_check
 
@@ -26,6 +35,7 @@ _sonata_admin:
     prefix: /admin
 
 app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
+    path: /
+    methods: GET
+    defaults: { _controller: 'AppBundle:Default:index' }
 

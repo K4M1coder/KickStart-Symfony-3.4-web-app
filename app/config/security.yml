@@ -46,6 +46,15 @@ security:
                 username_parameter: username
                 password_parameter: password
 
+        api_doc:
+            pattern:  ^/api/doc
+            stateless: true
+            anonymous: true
+        api_docs:
+            pattern:  ^/api/doc/swagger
+            stateless: true
+            anonymous: true
+
         api:
             pattern:   ^/api
             stateless: true
@@ -109,6 +118,8 @@ security:
 
         # URL of API
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api-docs, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
 
         # URL of FOSUserBundle which need to be available to anonymous users
