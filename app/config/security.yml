@@ -50,6 +50,7 @@ security:
             pattern:  ^/api/doc
             stateless: true
             anonymous: true
+
         api_docs:
             pattern:  ^/api/doc/swagger
             stateless: true

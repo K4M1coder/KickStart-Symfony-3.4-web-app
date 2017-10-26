@@ -161,7 +161,7 @@ swiftmailer:
 
 # Nelmio API Doc Bundle Configuration
 nelmio_api_doc:
-        name:                 'API documentation'
+        name:                 'documentation'
         exclude_sections:     []
         default_sections_opened:  true
         motd:
