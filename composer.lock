@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9e3e84b771ca0256cff12d2c1cf11f5",
+    "content-hash": "ca21cc2674c32dddc992a9cdd27e7f64",
     "packages": [
         {
             "name": "avanzu/admin-theme-bundle",
@@ -50,6 +50,57 @@
             ],
             "description": "Admin Theme based on the AdminLTE Template for easy integration into symfony",
             "time": "2017-10-09T22:37:03+00:00"
+        },
+        {
+            "name": "bcc/cron-manager-bundle",
+            "version": "v3.1",
+            "target-dir": "BCC/CronManagerBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/michelsalib/BCCCronManagerBundle.git",
+                "reference": "7dbd2dd884a6398e10088399e11270dfafb171a4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/michelsalib/BCCCronManagerBundle/zipball/7dbd2dd884a6398e10088399e11270dfafb171a4",
+                "reference": "7dbd2dd884a6398e10088399e11270dfafb171a4",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/config": "~2.2|~3.0",
+                "symfony/dependency-injection": "~2.2|~3.0",
+                "symfony/form": "~2.2|~3.0",
+                "symfony/framework-bundle": "~2.2|~3.0",
+                "symfony/http-foundation": "~2.2|~3.0",
+                "symfony/http-kernel": "~2.2|~3.0",
+                "symfony/options-resolver": "~2.2|~3.0",
+                "symfony/process": "~2.2|~3.0",
+                "symfony/serializer": "~2.2|~3.0",
+                "twig/twig": "~1.23|~2.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "BCC\\CronManagerBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michel Salib",
+                    "email": "michelsalib@hotmail.com",
+                    "homepage": "http://www.michelsalib.com"
+                }
+            ],
+            "description": "A cron table manager bundle for Symfony2",
+            "homepage": "http://github.com/michelsalib/BCCCronManagerBundle",
+            "keywords": [
+                "cron management"
+            ],
+            "time": "2017-08-25T13:18:03+00:00"
         },
         {
             "name": "behat/transliterator",
