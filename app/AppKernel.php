@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Avanzu\AdminThemeBundle\AvanzuAdminThemeBundle(),
             new BCC\CronManagerBundle\BCCCronManagerBundle(),
+            new JMose\CommandSchedulerBundle\JMoseCommandSchedulerBundle(),
 //            new Gregwar\CaptchaBundle\GregwarCaptchaBundle(),
 //            new Oneup\UploaderBundle\OneupUploaderBundle(),
 

@@ -49,10 +49,14 @@ app:
 #        path: /app # use one at the same time
 ##       route: app # use one at the same time
 #        permanent: true
-fos_user:
-    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+#fos_user:
+#    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 
 #BCCCronManager routing
 BCCCronManagerBundle:
     resource: "@BCCCronManagerBundle/Resources/config/routing.xml"
     prefix:   cron-manager
+
+jmose_command_scheduler:
+    resource: "@JMoseCommandSchedulerBundle/Resources/config/routing.yml"
+    prefix:   /

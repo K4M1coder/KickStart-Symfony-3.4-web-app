@@ -25,6 +25,7 @@
         "friendsofsymfony/jsrouting-bundle": "^1.6",
         "friendsofsymfony/rest-bundle": "^2.2",
         "incenteev/composer-parameter-handler": "^2.0",
+        "jmose/command-scheduler-bundle": "^1.2",
         "jms/serializer-bundle": "^2.2",
         "lexik/jwt-authentication-bundle": "^2.4",
         "nelmio/api-doc-bundle": "^2.13",
