@@ -1,3 +1,7 @@
+application_app:
+    resource: "@ApplicationAppBundle/Resources/config/routing.yml"
+    prefix:   /
+
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
@@ -45,3 +49,5 @@ app:
 #        path: /app # use one at the same time
 ##       route: app # use one at the same time
 #        permanent: true
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

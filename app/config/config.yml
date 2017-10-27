@@ -6,7 +6,7 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
+    locale: fr
 
 # Framework Configuration
 framework:
@@ -62,7 +62,9 @@ twig:
 # Assetic configuration
 assetic:
     debug:          '%kernel.debug%'
-    use_controller: false # '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    bundles:
+        - AppBundle
     filters:
         cssrewrite: ~
 
@@ -222,7 +224,6 @@ sonata_user:
 sonata_block:
     default_contexts: [cms]
     blocks:
-
         # enable the SonataAdminBundle block
         sonata.admin.block.admin_list:
             contexts:   [admin]
@@ -299,3 +300,5 @@ sonata_admin:
                 label:                Users
                 icon:                 '<i class="fa fa-users"></i>'
                 items:
+                    - sonata.user.admin.group
+                    - sonata.user.admin.user

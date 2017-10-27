@@ -10,17 +10,12 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 class DefaultController extends Controller
 {
     /**
-     * This is the documentation description of your method, it will appear
-     * on a specific pane. It will read all the text until the first
-     * annotation.
+     * This is the AppBundle Main Page
      *
      * @ApiDoc(
      *  resource=true,
-     *  description="Description of the API  Method",
-     *  filters={
-     *      {"name"="a-filter", "dataType"="integer"},
-     *      {"name"="another-filter", "dataType"="string", "pattern"="(foo|bar) ASC|DESC"}
-     *  }
+     *  description="Description of the index"
+     *
      *  )
      *
      */
