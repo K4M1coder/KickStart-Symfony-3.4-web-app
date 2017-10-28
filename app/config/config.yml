@@ -122,9 +122,11 @@ doctrine:
                 auto_mapping: true
                 connection: default
                 mappings:
-                    ApplicationSonataUserBundle: ~
-                    SonataUserBundle: ~
                     FOSUserBundle: ~
+                    SonataUserBundle: ~
+                    ApplicationSonataUserBundle: ~
+                    SonataNotificationBundle: ~
+                    ApplicationSonataNotificationBundle: ~
                     JMoseCommandSchedulerBundle: ~
                     gedmo_translatable:
                         type: annotation
@@ -303,3 +305,8 @@ sonata_admin:
                 items:
                     - sonata.user.admin.group
                     - sonata.user.admin.user
+
+sonata_notification:
+    backend: sonata.notification.backend.doctrine
+    admin:
+        enabled: false
