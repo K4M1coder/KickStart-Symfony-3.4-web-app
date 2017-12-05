@@ -1,0 +1,31 @@
+{
+    "name": "bcc/cron-manager-bundle",
+    "type": "symfony-bundle",
+    "description": "A cron table manager bundle for Symfony2",
+    "keywords": ["cron management"],
+    "homepage": "http://github.com/michelsalib/BCCCronManagerBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michel Salib",
+            "email": "michelsalib@hotmail.com",
+            "homepage": "http://www.michelsalib.com"
+        }
+    ],
+    "require": {
+        "symfony/config": "~2.2|~3.0",
+        "symfony/dependency-injection": "~2.2|~3.0",
+        "symfony/form": "~2.2|~3.0",
+        "symfony/framework-bundle": "~2.2|~3.0",
+        "symfony/http-foundation": "~2.2|~3.0",
+        "symfony/http-kernel": "~2.2|~3.0",
+        "symfony/options-resolver": "~2.2|~3.0",
+        "symfony/process": "~2.2|~3.0",
+        "symfony/serializer": "~2.2|~3.0",
+        "twig/twig": "~1.23|~2.0"
+    },
+    "autoload": {
+        "psr-0": { "BCC\\CronManagerBundle": "" }
+    },
+    "target-dir": "BCC/CronManagerBundle"
+}
