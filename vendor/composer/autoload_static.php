@@ -8,11 +8,11 @@ class ComposerStaticInit83aee82dc7b5bc21eb5250a5d3df9aff
 {
     public static $files = array (
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
-        '8ac9dba77d5c65db2811440ee8265f5d' => __DIR__ . '/..' . '/sonata-project/block-bundle/Resources/stubs/symfony2.php',
+        'd11dcc0191a380951885e568af488540' => __DIR__ . '/..' . '/sonata-project/block-bundle/src/Resources/stubs/symfony2.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
         '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         '32dcc8afd4335739640db7d200c1971d' => __DIR__ . '/..' . '/symfony/polyfill-apcu/bootstrap.php',
@@ -53,7 +53,6 @@ class ComposerStaticInit83aee82dc7b5bc21eb5250a5d3df9aff
             'Sonata\\DoctrineORMAdminBundle\\' => 30,
             'Sonata\\DatagridBundle\\' => 22,
             'Sonata\\CoreBundle\\' => 18,
-            'Sonata\\Cache\\Tests\\' => 19,
             'Sonata\\Cache\\' => 13,
             'Sonata\\BlockBundle\\' => 19,
             'Sonata\\AdminBundle\\' => 19,
@@ -97,6 +96,8 @@ class ComposerStaticInit83aee82dc7b5bc21eb5250a5d3df9aff
         ),
         'I' => 
         array (
+            'Interop\\Queue\\' => 14,
+            'Interop\\Amqp\\' => 13,
             'Incenteev\\ParameterHandler\\' => 27,
         ),
         'F' => 
@@ -109,11 +110,16 @@ class ComposerStaticInit83aee82dc7b5bc21eb5250a5d3df9aff
         'E' => 
         array (
             'Exporter\\' => 9,
+            'Enqueue\\AmqpTools\\' => 18,
+            'Enqueue\\AmqpLib\\' => 16,
         ),
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
+            'Doctrine\\Common\\Inflector\\' => 26,
+            'Doctrine\\Common\\DataFixtures\\' => 29,
             'Doctrine\\Common\\Cache\\' => 22,
+            'Doctrine\\Common\\Annotations\\' => 28,
             'Doctrine\\Common\\' => 16,
             'Doctrine\\Bundle\\FixturesBundle\\' => 31,
             'Doctrine\\Bundle\\DoctrineCacheBundle\\' => 36,
@@ -212,15 +218,15 @@ class ComposerStaticInit83aee82dc7b5bc21eb5250a5d3df9aff
         ),
         'Sonata\\UserBundle\\' => 
         array (
-            0 => __DIR__ . '/..' . '/sonata-project/user-bundle',
+            0 => __DIR__ . '/..' . '/sonata-project/user-bundle/src',
         ),
         'Sonata\\NotificationBundle\\' => 
         array (
-            0 => __DIR__ . '/..' . '/sonata-project/notification-bundle',
+            0 => __DIR__ . '/..' . '/sonata-project/notification-bundle/src',
         ),
         'Sonata\\EasyExtendsBundle\\' => 
         array (
-            0 => __DIR__ . '/..' . '/sonata-project/easy-extends-bundle',
+            0 => __DIR__ . '/..' . '/sonata-project/easy-extends-bundle/src',
         ),
         'Sonata\\Doctrine\\Tests\\' => 
         array (
@@ -232,31 +238,27 @@ class ComposerStaticInit83aee82dc7b5bc21eb5250a5d3df9aff
         ),
         'Sonata\\DoctrineORMAdminBundle\\' => 
         array (
-            0 => __DIR__ . '/..' . '/sonata-project/doctrine-orm-admin-bundle',
+            0 => __DIR__ . '/..' . '/sonata-project/doctrine-orm-admin-bundle/src',
         ),
         'Sonata\\DatagridBundle\\' => 
         array (
-            0 => __DIR__ . '/..' . '/sonata-project/datagrid-bundle',
+            0 => __DIR__ . '/..' . '/sonata-project/datagrid-bundle/src',
         ),
         'Sonata\\CoreBundle\\' => 
         array (
-            0 => __DIR__ . '/..' . '/sonata-project/core-bundle',
-        ),
-        'Sonata\\Cache\\Tests\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/sonata-project/cache/test',
+            0 => __DIR__ . '/..' . '/sonata-project/core-bundle/src',
         ),
         'Sonata\\Cache\\' => 
         array (
-            0 => __DIR__ . '/..' . '/sonata-project/cache/lib',
+            0 => __DIR__ . '/..' . '/sonata-project/cache/src',
         ),
         'Sonata\\BlockBundle\\' => 
         array (
-            0 => __DIR__ . '/..' . '/sonata-project/block-bundle',
+            0 => __DIR__ . '/..' . '/sonata-project/block-bundle/src',
         ),
         'Sonata\\AdminBundle\\' => 
         array (
-            0 => __DIR__ . '/..' . '/sonata-project/admin-bundle',
+            0 => __DIR__ . '/..' . '/sonata-project/admin-bundle/src',
         ),
         'Sensio\\Bundle\\GeneratorBundle\\' => 
         array (
@@ -324,7 +326,7 @@ class ComposerStaticInit83aee82dc7b5bc21eb5250a5d3df9aff
         ),
         'Knp\\Bundle\\MenuBundle\\' => 
         array (
-            0 => __DIR__ . '/..' . '/knplabs/knp-menu-bundle',
+            0 => __DIR__ . '/..' . '/knplabs/knp-menu-bundle/src',
         ),
         'JMose\\CommandSchedulerBundle\\' => 
         array (
@@ -333,6 +335,14 @@ class ComposerStaticInit83aee82dc7b5bc21eb5250a5d3df9aff
         'JMS\\SerializerBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/jms/serializer-bundle',
+        ),
+        'Interop\\Queue\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/queue-interop/queue-interop/src',
+        ),
+        'Interop\\Amqp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/queue-interop/amqp-interop/src',
         ),
         'Incenteev\\ParameterHandler\\' => 
         array (
@@ -358,13 +368,33 @@ class ComposerStaticInit83aee82dc7b5bc21eb5250a5d3df9aff
         array (
             0 => __DIR__ . '/..' . '/sonata-project/exporter/src',
         ),
+        'Enqueue\\AmqpTools\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/enqueue/amqp-tools',
+        ),
+        'Enqueue\\AmqpLib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/enqueue/amqp-lib',
+        ),
         'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
+        'Doctrine\\Common\\Inflector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
+        ),
+        'Doctrine\\Common\\DataFixtures\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/data-fixtures/lib/Doctrine/Common/DataFixtures',
+        ),
         'Doctrine\\Common\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache',
+        ),
+        'Doctrine\\Common\\Annotations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
         ),
         'Doctrine\\Common\\' => 
         array (
@@ -507,21 +537,9 @@ class ComposerStaticInit83aee82dc7b5bc21eb5250a5d3df9aff
             array (
                 0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
             ),
-            'Doctrine\\Common\\Inflector\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
-            ),
-            'Doctrine\\Common\\DataFixtures' => 
-            array (
-                0 => __DIR__ . '/..' . '/doctrine/data-fixtures/lib',
-            ),
             'Doctrine\\Common\\Collections\\' => 
             array (
                 0 => __DIR__ . '/..' . '/doctrine/collections/lib',
-            ),
-            'Doctrine\\Common\\Annotations\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/doctrine/annotations/lib',
             ),
         ),
         'B' => 

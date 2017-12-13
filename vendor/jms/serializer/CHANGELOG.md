@@ -1,7 +1,46 @@
 # Change Log
 
-## [1.9.0](https://github.com/schmittjoh/serializer/tree/1.9.0)
+## [1.10.0](https://github.com/schmittjoh/serializer/tree/1.10.0)
 
+**Implemented enhancements:**
+
+- support PSR-11 compatible DI containers [\#844](https://github.com/schmittjoh/serializer/pull/844) ([xabbuh](https://github.com/xabbuh))
+
+**Closed issues:**
+
+- Serialize using jsonSerialize\(\) if object implements JsonSerializable [\#846](https://github.com/schmittjoh/serializer/issues/846)
+- ExclusionStrategy backward compatibility break [\#843](https://github.com/schmittjoh/serializer/issues/843)
+- @MaxDepth jms/serializer-bundle 2.2 [\#842](https://github.com/schmittjoh/serializer/issues/842)
+
+## [1.9.2](https://github.com/schmittjoh/serializer/tree/1.9.2) (2017-11-22)
+**Fixed bugs:**
+
+- Missing ClassMetadata deserialization data [\#841](https://github.com/schmittjoh/serializer/pull/841) ([TristanMogwai](https://github.com/TristanMogwai))
+
+**Closed issues:**
+
+- DateTime format documentation [\#836](https://github.com/schmittjoh/serializer/issues/836)
+- Deserialization not working with camelCase [\#831](https://github.com/schmittjoh/serializer/issues/831)
+
+**Merged pull requests:**
+
+- Fix documentation syntax errors on available types [\#839](https://github.com/schmittjoh/serializer/pull/839) ([andy-morgan](https://github.com/andy-morgan))
+- Improve documentation about default DateTime format [\#838](https://github.com/schmittjoh/serializer/pull/838) ([enumag](https://github.com/enumag))
+
+## [1.9.1](https://github.com/schmittjoh/serializer/tree/1.9.1) (2017-10-27)
+**Fixed bugs:**
+
+- Dynamic exclusion strategy, Variable "object" is not valid [\#826](https://github.com/schmittjoh/serializer/issues/826)
+
+**Closed issues:**
+
+- Allow DateTime or Null [\#779](https://github.com/schmittjoh/serializer/issues/779)
+
+**Merged pull requests:**
+
+- Alow to use "object" var in expressions when deserializing [\#827](https://github.com/schmittjoh/serializer/pull/827) ([goetas](https://github.com/goetas))
+
+## [1.9.0](https://github.com/schmittjoh/serializer/tree/1.9.0) (2017-09-28)
 **Implemented enhancements:**
 
 - Doctrine LazyCriteriaCollection not supported [\#814](https://github.com/schmittjoh/serializer/issues/814)
@@ -11,6 +50,7 @@
 
 **Fixed bugs:**
 
+-  Node no longer exists - Deserialize Error [\#817](https://github.com/schmittjoh/serializer/issues/817)
 - Serializer fails if there is no AnnotationDriver in the DriverChain instance [\#815](https://github.com/schmittjoh/serializer/issues/815)
 - Evaluate XML xsi:nil="1" to null  [\#799](https://github.com/schmittjoh/serializer/pull/799) ([Bouwdie](https://github.com/Bouwdie))
 

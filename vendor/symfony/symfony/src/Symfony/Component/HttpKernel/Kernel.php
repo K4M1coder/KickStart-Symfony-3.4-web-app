@@ -64,13 +64,15 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
 
     private $projectDir;
     private $warmupDir;
+    private $requestStackSize = 0;
+    private $resetServices = false;
 
-    const VERSION = '3.4.0-DEV';
+    const VERSION = '3.4.0';
     const VERSION_ID = 30400;
     const MAJOR_VERSION = 3;
     const MINOR_VERSION = 4;
     const RELEASE_VERSION = 0;
-    const EXTRA_VERSION = 'DEV';
+    const EXTRA_VERSION = '';
 
     const END_OF_MAINTENANCE = '11/2020';
     const END_OF_LIFE = '11/2021';
@@ -99,6 +101,8 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
 
         $this->booted = false;
         $this->container = null;
+        $this->requestStackSize = 0;
+        $this->resetServices = false;
     }
 
     /**
@@ -107,7 +111,19 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
     public function boot()
     {
         if (true === $this->booted) {
+            if (!$this->requestStackSize && $this->resetServices) {
+                if ($this->container->has('services_resetter')) {
+                    $this->container->get('services_resetter')->reset();
+                }
+                $this->resetServices = false;
+            }
+
             return;
+        }
+        if ($this->debug && !isset($_ENV['SHELL_VERBOSITY']) && !isset($_SERVER['SHELL_VERBOSITY'])) {
+            putenv('SHELL_VERBOSITY=3');
+            $_ENV['SHELL_VERBOSITY'] = 3;
+            $_SERVER['SHELL_VERBOSITY'] = 3;
         }
 
         if ($this->loadClassCache) {
@@ -169,6 +185,8 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
         }
 
         $this->container = null;
+        $this->requestStackSize = 0;
+        $this->resetServices = false;
     }
 
     /**
@@ -176,17 +194,15 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
      */
     public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
     {
-        if (false === $this->booted) {
-            if ($this->debug && !isset($_SERVER['SHELL_VERBOSITY'])) {
-                putenv('SHELL_VERBOSITY=3');
-                $_ENV['SHELL_VERBOSITY'] = 3;
-                $_SERVER['SHELL_VERBOSITY'] = 3;
-            }
+        $this->boot();
+        ++$this->requestStackSize;
+        $this->resetServices = true;
 
-            $this->boot();
+        try {
+            return $this->getHttpKernel()->handle($request, $type, $catch);
+        } finally {
+            --$this->requestStackSize;
         }
-
-        return $this->getHttpKernel()->handle($request, $type, $catch);
     }
 
     /**
@@ -377,7 +393,7 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
      * @param string $name      The cache name prefix
      * @param string $extension File extension of the resulting file
      *
-     * @deprecated since version 3.3, to be removed in 4.0.
+     * @deprecated since version 3.3, to be removed in 4.0. The class cache is not needed anymore when using PHP 7.0.
      */
     public function loadClassCache($name = 'classes', $extension = '.php')
     {
@@ -527,8 +543,6 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
      * The extension point similar to the Bundle::build() method.
      *
      * Use this method to register compiler passes and manipulate the container during the building process.
-     *
-     * @param ContainerBuilder $container
      */
     protected function build(ContainerBuilder $container)
     {
@@ -567,8 +581,11 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
         $class = $this->getContainerClass();
         $cacheDir = $this->warmupDir ?: $this->getCacheDir();
         $cache = new ConfigCache($cacheDir.'/'.$class.'.php', $this->debug);
-        $fresh = true;
-        if (!$cache->isFresh()) {
+        if ($fresh = $cache->isFresh()) {
+            $this->container = require $cache->getPath();
+            $fresh = \is_object($this->container);
+        }
+        if (!$fresh) {
             if ($this->debug) {
                 $collectedLogs = array();
                 $previousHandler = set_error_handler(function ($type, $message, $file, $line) use (&$collectedLogs, &$previousHandler) {
@@ -618,11 +635,9 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
             $oldContainer = file_exists($cache->getPath()) && is_object($oldContainer = @include $cache->getPath()) ? new \ReflectionClass($oldContainer) : false;
 
             $this->dumpContainer($cache, $container, $class, $this->getContainerBaseClass());
-
-            $fresh = false;
+            $this->container = require $cache->getPath();
         }
 
-        $this->container = require $cache->getPath();
         $this->container->set('kernel', $this);
 
         if ($fresh) {
@@ -630,7 +645,17 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
         }
 
         if ($oldContainer && get_class($this->container) !== $oldContainer->name) {
-            (new Filesystem())->remove(dirname($oldContainer->getFileName()));
+            // Because concurrent requests might still be using them,
+            // old container files are not removed immediately,
+            // but on a next dump of the container.
+            $oldContainerDir = dirname($oldContainer->getFileName());
+            foreach (glob(dirname($oldContainerDir).'/*.legacyContainer') as $legacyContainer) {
+                if ($oldContainerDir.'.legacyContainer' !== $legacyContainer && @unlink($legacyContainer)) {
+                    (new Filesystem())->remove(substr($legacyContainer, 0, -16));
+                }
+            }
+
+            touch($oldContainerDir.'.legacyContainer');
         }
 
         if ($this->container->has('cache_warmer')) {
@@ -736,8 +761,6 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
 
     /**
      * Prepares the ContainerBuilder before it is compiled.
-     *
-     * @param ContainerBuilder $container A ContainerBuilder instance
      */
     protected function prepareContainer(ContainerBuilder $container)
     {
@@ -806,6 +829,7 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
             'file' => $cache->getPath(),
             'as_files' => true,
             'debug' => $this->debug,
+            'inline_class_loader_parameter' => !$this->loadClassCache && !class_exists(ClassCollectionLoader::class, false) ? 'container.dumper.inline_class_loader' : null,
         ));
 
         $rootCode = array_pop($content);
@@ -813,7 +837,7 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
         $fs = new Filesystem();
 
         foreach ($content as $file => $code) {
-            $fs->dumpFile($dir.$file, $code, null);
+            $fs->dumpFile($dir.$file, $code);
             @chmod($dir.$file, 0666 & ~umask());
         }
 
@@ -822,8 +846,6 @@ abstract class Kernel implements KernelInterface, RebootableInterface, Terminabl
 
     /**
      * Returns a loader for the container.
-     *
-     * @param ContainerInterface $container The service container
      *
      * @return DelegatingLoader The loader
      */

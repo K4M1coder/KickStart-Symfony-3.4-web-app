@@ -6,6 +6,11 @@ ClassLoader
 
  * The component has been removed. Use Composer instead.
 
+Config
+------
+
+ * The protected `TreeBuilder::$builder` property has been removed.
+
 Console
 -------
 
@@ -226,6 +231,10 @@ Finder
 Form
 ----
 
+* The values of the `FormEvents::*` constants have been updated to match the
+  constant names. You should only update your application if you relied on the
+  constant values instead of their names.
+
  * The `choices_as_values` option of the `ChoiceType` has been removed.
 
  * Support for data objects that implements both `Traversable` and
@@ -314,7 +323,7 @@ Form
    ```php
    class MyTimezoneType extends AbstractType
    {
-       public function. getParent()
+       public function getParent()
        {
            return TimezoneType::class;
        }
@@ -325,6 +334,8 @@ Form
        }
    }
    ```
+
+ * `FormRendererInterface::setTheme` and `FormRendererEngineInterface::setTheme` have a new optional argument `$useDefaultThemes` with a default value set to `true`.
 
 FrameworkBundle
 ---------------
@@ -587,12 +598,6 @@ HttpKernel
            tags: ['console.command']
    ```
 
- * Removed the `kernel.root_dir` parameter. Use the `kernel.project_dir` parameter
-   instead.
-
- * Removed the `Kernel::getRootDir()` method. Use the `Kernel::getProjectDir()`
-   method instead.
-
  * The `Extension::addClassesToCompile()` and `Extension::getClassesToCompile()` methods have been removed.
 
  * Possibility to pass non-scalar values as URI attributes to the ESI and SSI
@@ -662,7 +667,7 @@ Process
 
  * Extending `Process::run()`, `Process::mustRun()` and `Process::restart()` is
    not supported anymore.
-
+   
  * The `getEnhanceWindowsCompatibility()` and `setEnhanceWindowsCompatibility()` methods of the `Process` class have been removed.
 
 Profiler

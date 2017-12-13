@@ -253,11 +253,9 @@ class TextDescriptor extends Descriptor
     /**
      * Formats command aliases to show them in the command description.
      *
-     * @param Command $command
-     *
      * @return string
      */
-    private function getCommandAliasesText($command)
+    private function getCommandAliasesText(Command $command)
     {
         $text = '';
         $aliases = $command->getAliases();
@@ -323,7 +321,7 @@ class TextDescriptor extends Descriptor
      *
      * @return int
      */
-    private function calculateTotalWidthForOptions($options)
+    private function calculateTotalWidthForOptions(array $options)
     {
         $totalWidth = 0;
         foreach ($options as $option) {

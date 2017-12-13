@@ -170,9 +170,10 @@ class PhpDumperTest extends TestCase
     public function testDumpAsFiles()
     {
         $container = include self::$fixturesPath.'/containers/container9.php';
+        $container->getDefinition('bar')->addTag('hot');
         $container->compile();
         $dumper = new PhpDumper($container);
-        $dump = print_r($dumper->dump(array('as_files' => true, 'file' => __DIR__)), true);
+        $dump = print_r($dumper->dump(array('as_files' => true, 'file' => __DIR__, 'hot_path_tag' => 'hot')), true);
         if ('\\' === DIRECTORY_SEPARATOR) {
             $dump = str_replace('\\\\Fixtures\\\\includes\\\\foo.php', '/Fixtures/includes/foo.php', $dump);
         }
@@ -301,21 +302,6 @@ class PhpDumperTest extends TestCase
         $this->assertSame($decorator, $container->get('decorator_service'), '->set() overrides an already defined service');
     }
 
-    /**
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
-     */
-    public function testCircularReference()
-    {
-        $container = new ContainerBuilder();
-        $container->register('foo', 'stdClass')->addArgument(new Reference('bar'))->setPublic(true);
-        $container->register('bar', 'stdClass')->setPublic(false)->addMethodCall('setA', array(new Reference('baz')));
-        $container->register('baz', 'stdClass')->addMethodCall('setA', array(new Reference('foo')))->setPublic(true);
-        $container->compile();
-
-        $dumper = new PhpDumper($container);
-        $dumper->dump();
-    }
-
     public function testDumpAutowireData()
     {
         $container = include self::$fixturesPath.'/containers/container24.php';
@@ -323,6 +309,15 @@ class PhpDumperTest extends TestCase
         $dumper = new PhpDumper($container);
 
         $this->assertStringEqualsFile(self::$fixturesPath.'/php/services24.php', $dumper->dump());
+    }
+
+    public function testEnvInId()
+    {
+        $container = include self::$fixturesPath.'/containers/container_env_in_id.php';
+        $container->compile();
+        $dumper = new PhpDumper($container);
+
+        $this->assertStringEqualsFile(self::$fixturesPath.'/php/services_env_in_id.php', $dumper->dump());
     }
 
     public function testEnvParameter()
@@ -762,6 +757,52 @@ class PhpDumperTest extends TestCase
         $this->assertNull($bar->closures[1]());
         $this->assertEquals(new \stdClass(), $bar->closures[2]());
         $this->assertEquals(array('foo1' => new \stdClass(), 'foo3' => new \stdClass()), iterator_to_array($bar->iter));
+    }
+
+    /**
+     * @dataProvider provideAlmostCircular
+     */
+    public function testAlmostCircular($visibility)
+    {
+        $container = include self::$fixturesPath.'/containers/container_almost_circular.php';
+        $container->compile();
+        $dumper = new PhpDumper($container);
+
+        $container = 'Symfony_DI_PhpDumper_Test_Almost_Circular_'.ucfirst($visibility);
+        $this->assertStringEqualsFile(self::$fixturesPath.'/php/services_almost_circular_'.$visibility.'.php', $dumper->dump(array('class' => $container)));
+
+        require self::$fixturesPath.'/php/services_almost_circular_'.$visibility.'.php';
+
+        $container = new $container();
+
+        $foo = $container->get('foo');
+        $this->assertSame($foo, $foo->bar->foobar->foo);
+
+        $foo2 = $container->get('foo2');
+        $this->assertSame($foo2, $foo2->bar->foobar->foo);
+
+        $this->assertSame(array(), (array) $container->get('foobar4'));
+    }
+
+    public function provideAlmostCircular()
+    {
+        yield array('public');
+        yield array('private');
+    }
+
+    public function testHotPathOptimizations()
+    {
+        $container = include self::$fixturesPath.'/containers/container_inline_requires.php';
+        $container->setParameter('inline_requires', true);
+        $container->compile();
+        $dumper = new PhpDumper($container);
+
+        $dump = $dumper->dump(array('hot_path_tag' => 'container.hot_path', 'inline_class_loader_parameter' => 'inline_requires', 'file' => self::$fixturesPath.'/php/services_inline_requires.php'));
+        if ('\\' === DIRECTORY_SEPARATOR) {
+            $dump = str_replace("'\\\\includes\\\\HotPath\\\\", "'/includes/HotPath/", $dump);
+        }
+
+        $this->assertStringEqualsFile(self::$fixturesPath.'/php/services_inline_requires.php', $dump);
     }
 
     public function testDumpHandlesLiteralClassWithRootNamespace()

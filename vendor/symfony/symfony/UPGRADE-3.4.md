@@ -1,6 +1,11 @@
 UPGRADE FROM 3.3 to 3.4
 =======================
 
+Config
+------
+
+ * The protected `TreeBuilder::$builder` property is deprecated and will be removed in 4.0.
+
 DependencyInjection
 -------------------
 
@@ -111,7 +116,7 @@ Form
    ```php
    class MyTimezoneType extends AbstractType
    {
-       public function. getParent()
+       public function getParent()
        {
            return TimezoneType::class;
        }

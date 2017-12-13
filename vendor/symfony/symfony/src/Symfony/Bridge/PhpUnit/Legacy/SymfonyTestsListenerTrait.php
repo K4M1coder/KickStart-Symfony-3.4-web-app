@@ -47,14 +47,9 @@ class SymfonyTestsListenerTrait
     public function __construct(array $mockedNamespaces = array())
     {
         if (class_exists('PHPUnit_Util_Blacklist')) {
-            \PHPUnit_Util_Blacklist::$blacklistedClassNames['\Symfony\Bridge\PhpUnit\DeprecationErrorHandler'] = 1;
-            \PHPUnit_Util_Blacklist::$blacklistedClassNames['\Symfony\Bridge\PhpUnit\SymfonyTestsListener'] = 1;
-            \PHPUnit_Util_Blacklist::$blacklistedClassNames['\Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListener'] = 1;
-            \PHPUnit_Util_Blacklist::$blacklistedClassNames['\Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListenerTrait'] = 1;
+            \PHPUnit_Util_Blacklist::$blacklistedClassNames['\Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListenerTrait'] = 2;
         } else {
-            Blacklist::$blacklistedClassNames['\Symfony\Bridge\PhpUnit\DeprecationErrorHandler'] = 1;
-            Blacklist::$blacklistedClassNames['\Symfony\Bridge\PhpUnit\SymfonyTestsListener'] = 1;
-            Blacklist::$blacklistedClassNames['\Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListenerTrait'] = 1;
+            Blacklist::$blacklistedClassNames['\Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListenerTrait'] = 2;
         }
 
         $warn = false;
@@ -110,6 +105,15 @@ class SymfonyTestsListenerTrait
         }
         $suiteName = $suite->getName();
         $this->testsWithWarnings = array();
+
+        foreach ($suite->tests() as $test) {
+            if (!($test instanceof \PHPUnit_Framework_TestCase || $test instanceof TestCase)) {
+                continue;
+            }
+            if (null === $Test::getPreserveGlobalStateSettings(get_class($test), $test->getName(false))) {
+                $test->setPreserveGlobalState(false);
+            }
+        }
 
         if (-1 === $this->state) {
             echo "Testing $suiteName\n";
@@ -262,11 +266,12 @@ class SymfonyTestsListenerTrait
         if ($this->runsInSeparateProcess) {
             $deprecations = file_get_contents($this->runsInSeparateProcess);
             unlink($this->runsInSeparateProcess);
+            putenv('SYMFONY_DEPRECATIONS_SERIALIZE');
             foreach ($deprecations ? unserialize($deprecations) : array() as $deprecation) {
                 if ($deprecation[0]) {
-                    trigger_error($deprecation[1], E_USER_DEPRECATED);
+                    trigger_error(serialize(array('deprecation' => $deprecation[1], 'class' => $className, 'method' => $test->getName(false))), E_USER_DEPRECATED);
                 } else {
-                    @trigger_error($deprecation[1], E_USER_DEPRECATED);
+                    @trigger_error(serialize(array('deprecation' => $deprecation[1], 'class' => $className, 'method' => $test->getName(false))), E_USER_DEPRECATED);
                 }
             }
             $this->runsInSeparateProcess = false;
@@ -326,6 +331,12 @@ class SymfonyTestsListenerTrait
 
             return $h ? $h($type, $msg, $file, $line, $context) : false;
         }
+        // If the message is serialized we need to extract the message. This occurs when the error is triggered by
+        // by the isolated test path in \Symfony\Bridge\PhpUnit\Legacy\SymfonyTestsListenerTrait::endTest().
+        $parsedMsg = @unserialize($msg);
+        if (is_array($parsedMsg)) {
+            $msg = $parsedMsg['deprecation'];
+        }
         if (error_reporting()) {
             $msg = 'Unsilenced deprecation: '.$msg;
         }
@@ -333,7 +344,7 @@ class SymfonyTestsListenerTrait
     }
 
     /**
-     * @param Test $test
+     * @param TestCase $test
      *
      * @return bool
      */

@@ -14,6 +14,7 @@ namespace Symfony\Component\Security\Guard\Firewall;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Guard\GuardAuthenticatorInterface;
 use Symfony\Component\Security\Guard\Token\PreAuthenticationGuardToken;
@@ -62,8 +63,6 @@ class GuardAuthenticationListener implements ListenerInterface
 
     /**
      * Iterates over each authenticator to see if each wants to authenticate the request.
-     *
-     * @param GetResponseEvent $event
      */
     public function handle(GetResponseEvent $event)
     {
@@ -124,7 +123,13 @@ class GuardAuthenticationListener implements ListenerInterface
                     return;
                 }
 
-                throw new \UnexpectedValueException(sprintf('The return value of "%s::getCredentials()" must not be null. Return false from "%s::supports()" instead.', get_class($guardAuthenticator), get_class($guardAuthenticator)));
+                if ($guardAuthenticator instanceof AbstractGuardAuthenticator) {
+                    @trigger_error(sprintf('Returning null from "%1$s::getCredentials()" is deprecated since version 3.4 and will throw an \UnexpectedValueException in 4.0. Return false from "%1$s::supports()" instead.', get_class($guardAuthenticator)), E_USER_DEPRECATED);
+
+                    return;
+                }
+
+                throw new \UnexpectedValueException(sprintf('The return value of "%1$s::getCredentials()" must not be null. Return false from "%1$s::supports()" instead.', get_class($guardAuthenticator)));
             }
 
             // create a token with the unique key, so that the provider knows which authenticator to use
@@ -179,8 +184,6 @@ class GuardAuthenticationListener implements ListenerInterface
 
     /**
      * Should be called if this listener will support remember me.
-     *
-     * @param RememberMeServicesInterface $rememberMeServices
      */
     public function setRememberMeServices(RememberMeServicesInterface $rememberMeServices)
     {
@@ -190,11 +193,6 @@ class GuardAuthenticationListener implements ListenerInterface
     /**
      * Checks to see if remember me is supported in the authenticator and
      * on the firewall. If it is, the RememberMeServicesInterface is notified.
-     *
-     * @param AuthenticatorInterface $guardAuthenticator
-     * @param Request                $request
-     * @param TokenInterface         $token
-     * @param Response               $response
      */
     private function triggerRememberMe(GuardAuthenticatorInterface $guardAuthenticator, Request $request, TokenInterface $token, Response $response = null)
     {

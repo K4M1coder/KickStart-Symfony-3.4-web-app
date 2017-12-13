@@ -125,7 +125,7 @@ class SecurityExtensionTest extends TestCase
 
     /**
      * @group legacy
-     * @expectedDeprecation Setting logout_on_user_change to false is deprecated as of 3.4 and will always be true in 4.0. Set logout_on_user_change to true in your firewall configuration.
+     * @expectedDeprecation Not setting "logout_on_user_change" to true on firewall "some_firewall" is deprecated as of 3.4, it will always be true in 4.0.
      */
     public function testDeprecationForUserLogout()
     {
@@ -176,7 +176,7 @@ class SecurityExtensionTest extends TestCase
 
     /**
      * @group legacy
-     * @expectedDeprecation Firewall "default" has no "provider" set but multiple providers exist. Using the first configured provider (first) is deprecated since 3.4 and will throw an exception in 4.0, set the "provider" key on the firewall instead.
+     * @expectedDeprecation Listener "http_basic" on firewall "default" has no "provider" set but multiple providers exist. Using the first configured provider (first) is deprecated since 3.4 and will throw an exception in 4.0, set the "provider" key on the firewall instead.
      */
     public function testDeprecationForAmbiguousProvider()
     {
@@ -197,6 +197,27 @@ class SecurityExtensionTest extends TestCase
         ));
 
         $container->compile();
+    }
+
+    public function testPerListenerProvider()
+    {
+        $container = $this->getRawContainer();
+        $container->loadFromExtension('security', array(
+            'providers' => array(
+                'first' => array('id' => 'foo'),
+                'second' => array('id' => 'bar'),
+            ),
+
+            'firewalls' => array(
+                'default' => array(
+                    'http_basic' => array('provider' => 'second'),
+                    'logout_on_user_change' => true,
+                ),
+            ),
+        ));
+
+        $container->compile();
+        $this->addToAssertionCount(1);
     }
 
     protected function getRawContainer()

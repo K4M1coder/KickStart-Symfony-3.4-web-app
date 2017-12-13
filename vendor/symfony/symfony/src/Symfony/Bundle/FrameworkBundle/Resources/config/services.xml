@@ -9,6 +9,7 @@
 
         <service id="event_dispatcher" class="Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher" public="true">
             <argument type="service" id="service_container" />
+            <tag name="container.hot_path" />
         </service>
         <service id="Symfony\Component\EventDispatcher\EventDispatcherInterface" alias="event_dispatcher" />
 
@@ -17,6 +18,7 @@
             <argument type="service" id="controller_resolver" />
             <argument type="service" id="request_stack" />
             <argument type="service" id="argument_resolver" />
+            <tag name="container.hot_path" />
         </service>
         <service id="Symfony\Component\HttpKernel\HttpKernelInterface" alias="http_kernel" />
 
@@ -66,19 +68,15 @@
             <argument type="tagged" tag="config_cache.resource_checker" />
         </service>
 
-        <service id="Symfony\Component\DependencyInjection\Config\ContainerParametersResourceChecker">
+        <service id="dependency_injection.config.container_parameters_resource_checker" class="Symfony\Component\DependencyInjection\Config\ContainerParametersResourceChecker">
             <argument type="service" id="service_container" />
             <tag name="config_cache.resource_checker" priority="-980" />
         </service>
 
-        <service id="Symfony\Component\Config\Resource\SelfCheckingResourceChecker">
+        <service id="config.resource.self_checking_resource_checker" class="Symfony\Component\Config\Resource\SelfCheckingResourceChecker">
             <tag name="config_cache.resource_checker" priority="-990" />
         </service>
 
-        <service id="Symfony\Component\HttpKernel\EventListener\ServiceResetListener">
-            <argument /> <!-- ResettableServicePass will inject an iterator of initialized services here ($serviceId => $serviceInstance) -->
-            <argument type="collection" /> <!-- ResettableServicePass will inject an array of reset methods here ($serviceId => $method) -->
-            <tag name="kernel.event_subscriber" />
-        </service>
+        <service id="services_resetter" class="Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter" public="true" />
     </services>
 </container>

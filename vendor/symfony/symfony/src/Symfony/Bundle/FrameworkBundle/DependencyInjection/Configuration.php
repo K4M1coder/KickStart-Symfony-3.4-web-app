@@ -12,6 +12,7 @@
 namespace Symfony\Bundle\FrameworkBundle\DependencyInjection;
 
 use Doctrine\Common\Annotations\Annotation;
+use Doctrine\Common\Cache\Cache;
 use Symfony\Bundle\FullStack;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -20,6 +21,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Lock\Lock;
 use Symfony\Component\Lock\Store\SemaphoreStore;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\Validation;
@@ -141,7 +143,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('csrf_protection')
-                    ->canBeEnabled()
+                    ->{!class_exists(FullStack::class) && class_exists(CsrfTokenManagerInterface::class) ? 'canBeDisabled' : 'canBeEnabled'}()
                 ->end()
             ->end()
         ;
@@ -676,6 +678,10 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->booleanNode('logging')->defaultValue($this->debug)->end()
                         ->scalarNode('formatter')->defaultValue('translator.formatter.default')->end()
+                        ->scalarNode('default_path')
+                            ->info('The default path used to load translations')
+                            ->defaultValue('%kernel.project_dir%/translations')
+                        ->end()
                         ->arrayNode('paths')
                             ->prototype('scalar')->end()
                         ->end()
@@ -741,7 +747,7 @@ class Configuration implements ConfigurationInterface
                     ->info('annotation configuration')
                     ->{class_exists(Annotation::class) ? 'canBeDisabled' : 'canBeEnabled'}()
                     ->children()
-                        ->scalarNode('cache')->defaultValue('php_array')->end()
+                        ->scalarNode('cache')->defaultValue(interface_exists(Cache::class) ? 'php_array' : 'none')->end()
                         ->scalarNode('file_cache_dir')->defaultValue('%kernel.cache_dir%/annotations')->end()
                         ->booleanNode('debug')->defaultValue($this->debug)->end()
                     ->end()

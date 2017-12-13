@@ -49,6 +49,18 @@ class LiipMonitorExtension extends Extension
 
         $container->setParameter(sprintf('%s.default_group', $this->getAlias()), $config['default_group']);
 
+        // symfony3 does not define templating.helper.assets unless php templating is included
+        if ($container->has('templating.helper.assets')) {
+            $pathHelper = $container->getDefinition('liip_monitor.helper');
+            $pathHelper->replaceArgument(0, 'templating.helper.assets');
+        }
+
+        // symfony3 does not define templating.helper.router unless php templating is included
+        if ($container->has('templating.helper.router')) {
+            $pathHelper = $container->getDefinition('liip_monitor.helper');
+            $pathHelper->replaceArgument(1, 'templating.helper.router');
+        }
+
         if (empty($config['checks'])) {
             return;
         }
@@ -98,6 +110,7 @@ class LiipMonitorExtension extends Extension
             case 'writable_directory':
             case 'process_running':
             case 'doctrine_dbal':
+            case 'doctrine_mongodb':
             case 'http_service':
             case 'guzzle_http_service':
             case 'memcache':

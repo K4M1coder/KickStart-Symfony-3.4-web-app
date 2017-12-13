@@ -166,12 +166,11 @@ class ConfigurationTest extends TestCase
      */
     public function testInvalidAssetsConfiguration(array $assetConfig, $expectedMessage)
     {
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}(
-            InvalidConfigurationException::class,
-            $expectedMessage
-        );
-        if (method_exists($this, 'expectExceptionMessage')) {
+        if (method_exists($this, 'expectException')) {
+            $this->expectException(InvalidConfigurationException::class);
             $this->expectExceptionMessage($expectedMessage);
+        } else {
+            $this->setExpectedException(InvalidConfigurationException::class, $expectedMessage);
         }
 
         $processor = new Processor();
@@ -258,6 +257,7 @@ class ConfigurationTest extends TestCase
                 'logging' => true,
                 'formatter' => 'translator.formatter.default',
                 'paths' => array(),
+                'default_path' => '%kernel.project_dir%/translations',
             ),
             'validation' => array(
                 'enabled' => !class_exists(FullStack::class),
