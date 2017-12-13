@@ -27,6 +27,8 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Avanzu\AdminThemeBundle\AvanzuAdminThemeBundle(),
+            new BCC\CronManagerBundle\BCCCronManagerBundle(),
+            new JMose\CommandSchedulerBundle\JMoseCommandSchedulerBundle(),
 //            new Gregwar\CaptchaBundle\GregwarCaptchaBundle(),
 //            new Oneup\UploaderBundle\OneupUploaderBundle(),
 
@@ -38,8 +40,8 @@ class AppKernel extends Kernel
             new Sonata\AdminBundle\SonataAdminBundle(),
 //            new Sonata\CacheBundle\SonataCacheBundle(),
 //            new Sonata\SeoBundle\SonataSeoBundle(),
-//            new Sonata\NotificationBundle\SonataNotificationBundle(),
-//            new Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle(),
+            new Sonata\NotificationBundle\SonataNotificationBundle(),
+            new Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle(),
 //            new Symfony\Cmf\Bundle\RoutingBundle\CmfRoutingBundle(),
 
             new Application\Sonata\UserBundle\ApplicationSonataUserBundle(),
