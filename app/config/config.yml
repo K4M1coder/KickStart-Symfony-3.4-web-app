@@ -310,3 +310,22 @@ sonata_notification:
     backend: sonata.notification.backend.doctrine
     admin:
         enabled: false
+    backends:
+        doctrine:
+            message_manager:      sonata.notification.manager.message.default
+
+            # The max age in seconds
+            max_age:              86400
+
+            # The delay in microseconds
+            pause:                500000
+
+            # The number of items on each iteration
+            batch_size:           10
+
+            # Raising errors level
+            states:
+                in_progress:          10
+                error:                20
+                open:                 100
+                done:                 10000

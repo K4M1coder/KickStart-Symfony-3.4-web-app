@@ -1,8 +1,8 @@
 {
-    "name": "symfony/framework-standard-edition",
+    "name": "symfony/framework-extended-edition",
     "license": "MIT",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "The \"Symfony Standard Edition\" distribution Extended to start Rich and complex App Quickly",
     "autoload": {
         "psr-4": {
             "AppBundle\\": "src/AppBundle"
@@ -44,7 +44,7 @@
         "symfony/monolog-bundle": "^3.1.0",
         "symfony/polyfill-apcu": "^1.0",
         "symfony/swiftmailer-bundle": "^2.3.10",
-        "symfony/symfony": "3.4.x-dev",
+        "symfony/symfony": "3.4",
         "twig/twig": "^1.0||^2.0"
     },
     "require-dev": {
